@@ -25,8 +25,7 @@ public class Planet
     public float[] m_Pos = {0.0f, 0.0f, 0.0f};
 
 
-    public Planet(int stacks, int slices, float radius, float squash, GL10 gl, Context context, boolean imageId, int resourceId)
-    {
+    public Planet(int stacks, int slices, float radius, float squash, GL10 gl, Context context, boolean imageId, int resourceId) {
         this.m_Stacks = stacks;
         this.m_Slices = slices;
         this.m_Radius = radius;
@@ -34,14 +33,13 @@ public class Planet
         init(m_Stacks,m_Slices,radius,squash, gl, context, imageId, resourceId);
     }
 
-    private void init(int stacks,int slices, float radius, float squash, GL10 gl, Context context, boolean imageId, int resourceId)		// 1
-    {
+    private void init(int stacks,int slices, float radius, float squash, GL10 gl, Context context, boolean imageId, int resourceId) {
         float[] vertexData;
         float[] normalData;
         float[] colorData;
         float[] textData=null;
 
-        float colorIncrement=0f;
+        float colorIncrement = 0f;
 
         float blue=0f;
         float red=1.0f;
@@ -51,15 +49,14 @@ public class Planet
         int nIndex=0;				//normal index
         int tIndex=0;				//texture index
 
-        if(imageId == true)
-        {
-            createTexture(gl, context, resourceId);	//2
+        if(imageId == true) {
+            createTexture(gl, context, resourceId);
         }
 
-        m_Scale=radius;
-        m_Squash=squash;
+        m_Scale = radius;
+        m_Squash = squash;
 
-        colorIncrement=1.0f/(float)stacks;
+        colorIncrement = 1.0f/(float)stacks;
 
         m_Stacks = stacks;
         m_Slices = slices;
@@ -76,15 +73,14 @@ public class Planet
 
         normalData = new float[3*((m_Slices*2+2) * m_Stacks)];
 
-        if(imageId == true)		//3
+        if(imageId == true)
             textData = new float [2 * ((m_Slices*2+2) * (m_Stacks))];
 
         int	phiIdx, thetaIdx;
 
         //Latitude
 
-        for(phiIdx=0; phiIdx < m_Stacks; phiIdx++)
-        {
+        for(phiIdx=0; phiIdx < m_Stacks; phiIdx++) {
             //Starts at -1.57 and goes up to +1.57 radians.
             ///The first circle.
             float phi0 = (float)Math.PI * ((float)(phiIdx+0) * (1.0f/(float)(m_Stacks)) - 0.5f);
@@ -100,8 +96,7 @@ public class Planet
             float cosTheta, sinTheta;
 
             //Longitude
-            for(thetaIdx=0; thetaIdx < m_Slices; thetaIdx++)
-            {
+            for(thetaIdx=0; thetaIdx < m_Slices; thetaIdx++) {
                 //Increment along the longitude circle each "slice."
                 float theta = (float) (2.0f*(float)Math.PI * ((float)thetaIdx) * (1.0/(float)(m_Slices-1)));
                 cosTheta = (float)Math.cos(theta);
@@ -136,8 +131,7 @@ public class Planet
                 normalData[nIndex+5] = cosPhi1 * sinTheta;
                 normalData[nIndex+4] = sinPhi1;
 
-                if(textData != null)
-                {		//4
+                if(textData != null) {
                     float texX = (float)thetaIdx * (1.0f/(float)(m_Slices-1));
                     textData [tIndex + 0] = texX;
                     textData [tIndex + 1] = (float)(phiIdx+0) * (1.0f/(float)(m_Stacks));
@@ -158,7 +152,7 @@ public class Planet
                 vIndex+=2*3;
                 nIndex+=2*3;
 
-                if(textData!=null)			//5
+                if(textData!=null)
                     tIndex+= 2*2;
 
                 blue+=colorIncrement;
@@ -177,7 +171,7 @@ public class Planet
 
 
                 if(textData!= null)
-                {			//6
+                {
                     textData [tIndex + 0] = textData [tIndex + 2] = textData [tIndex -2];
                     textData [tIndex + 1] = textData [tIndex + 3] = textData [tIndex -1];
                 }
@@ -196,8 +190,7 @@ public class Planet
             m_TextureData = makeFloatBuffer(textData);
     }
 
-    protected static FloatBuffer makeFloatBuffer(float[] arr)
-    {
+    protected static FloatBuffer makeFloatBuffer(float[] arr) {
         ByteBuffer bb = ByteBuffer.allocateDirect(arr.length*4);
         bb.order(ByteOrder.nativeOrder());
         FloatBuffer fb = bb.asFloatBuffer();
@@ -206,8 +199,7 @@ public class Planet
         return fb;
     }
 
-    public void draw(GL10 gl)
-    {
+    public void draw(GL10 gl) {
         gl.glMatrixMode(GL10.GL_MODELVIEW);
         gl.glEnable(GL10.GL_CULL_FACE);
         gl.glCullFace(GL10.GL_BACK);
@@ -216,9 +208,8 @@ public class Planet
         gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
         gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
 
-        if(m_TextureData != null)
-        {
-            gl.glEnable(GL10.GL_TEXTURE_2D);		//1
+        if(m_TextureData != null) {
+            gl.glEnable(GL10.GL_TEXTURE_2D);
             gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
             gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[0]);
             gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, m_TextureData);
@@ -255,8 +246,7 @@ public class Planet
         return fb;
     }
 
-    public void setPosition(float x, float y, float z)
-    {
+    public void setPosition(float x, float y, float z) {
         m_Pos[0] = x;
         m_Pos[1] = y;
         m_Pos[2] = z;
@@ -264,19 +254,18 @@ public class Planet
 
     private int[] textures = new int[1];
 
-    public int createTexture(GL10 gl, Context contextRegf, int resource)
-    {
-        Bitmap tempImage = BitmapFactory.decodeResource(contextRegf.getResources(), resource); // 1
+    public int createTexture(GL10 gl, Context contextRegf, int resource) {
+        Bitmap tempImage = BitmapFactory.decodeResource(contextRegf.getResources(), resource);
 
-        gl.glGenTextures(1, textures, 0); // 2
-        gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[0]); // 3
+        gl.glGenTextures(1, textures, 0);
+        gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[0]);
 
-        GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, tempImage, 0); // 4
+        GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, tempImage, 0);
 
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR); // 5a
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR); // 5b
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
 
-        tempImage.recycle();//6
+        tempImage.recycle();
 
         return resource;
     }

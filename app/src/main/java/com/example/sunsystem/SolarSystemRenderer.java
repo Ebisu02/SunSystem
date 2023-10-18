@@ -13,9 +13,7 @@ import android.os.SystemClock;
 
 class SolarSystemRenderer implements GLSurfaceView.Renderer
 {
-    private float mTransY;
     private float mAngle;
-    private Planet mPlanet;
 
     private Planet m_Earth;
     private Planet m_Sun;
@@ -115,9 +113,6 @@ class SolarSystemRenderer implements GLSurfaceView.Renderer
         gl.glPopMatrix();
     }
 
-    private float moonOrbitRadius = 0.50f;
-    private float moonOrbitSpeed = 0.21f;
-
     public void onDrawFrame(GL10 gl) {
         float[] paleYellow = {1.0f, 1.0f, 0.3f, 1.0f};
         float[] white = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -177,9 +172,6 @@ class SolarSystemRenderer implements GLSurfaceView.Renderer
         gl.glTranslatef(moonX, 0.0f, moonZ);
         executePlanet(m_Moon, gl);
         gl.glPopMatrix();
-
-
-
     }
 
 
